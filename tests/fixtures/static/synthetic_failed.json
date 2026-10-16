@@ -1,0 +1,22 @@
+{
+  "all_public_methods_exposed": false,
+  "apk": {
+    "dex_files": [],
+    "path": "target/app.apk",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "bridge_classes": [],
+  "error": "BadZipFile: File is not a zip file",
+  "min_sdk": null,
+  "package": null,
+  "registrations": [],
+  "removals": [],
+  "schema": 1,
+  "stats": {
+    "classes": 0,
+    "methods_scanned": 0,
+    "seconds": 0.0
+  },
+  "status": "failed",
+  "target_sdk": null
+}

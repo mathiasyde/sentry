@@ -1,0 +1,1 @@
+Generated report: <JSON> and <MD> (0 findings, risk score 0/100)

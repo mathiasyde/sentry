@@ -10,9 +10,11 @@ import android.os.Looper
 import android.util.Base64
 import android.util.Log
 import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebView.getCurrentWebViewPackage
 import android.webkit.WebView.setWebContentsDebuggingEnabled
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -201,6 +203,8 @@ fun WebViewScreen(
                     settings.allowUniversalAccessFromFileURLs = true
 
                     setWebContentsDebuggingEnabled(true)
+                    webViewClient = WebViewClient()
+                    webChromeClient = WebChromeClient()
                     addJavascriptInterface(Bridge(context, onPermissionRequest, onTakePhoto), "native")
 
                     loadUrl(url)

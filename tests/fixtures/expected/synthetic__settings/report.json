@@ -1,0 +1,211 @@
+{
+  "findings": [
+    {
+      "description": "A file:// page can make network requests to arbitrary origins. This is a high-impact WebView misconfiguration.",
+      "evidence": [
+        {
+          "setting": "setAllowUniversalAccessFromFileURLs",
+          "timestamp": "2026-01-01T00:00:05.000Z",
+          "value": true,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Keep allowUniversalAccessFromFileURLs disabled and serve local content from a constrained WebViewAssetLoader origin when possible.",
+      "rule_id": "WV-UNIVERSAL-FILE-ACCESS",
+      "severity": "critical",
+      "title": "File URLs can access arbitrary origins"
+    },
+    {
+      "description": "A page loaded from file:// can read other file:// resources, which can expose local app or device files.",
+      "evidence": [
+        {
+          "setting": "setAllowFileAccessFromFileURLs",
+          "timestamp": "2026-01-01T00:00:04.000Z",
+          "value": true,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Keep allowFileAccessFromFileURLs disabled and avoid loading untrusted file:// pages.",
+      "rule_id": "WV-FILE-FROM-FILE",
+      "severity": "high",
+      "title": "File URLs can access other file URLs"
+    },
+    {
+      "description": "The WebView allows HTTPS pages to load cleartext HTTP subresources, weakening transport security.",
+      "evidence": [
+        {
+          "setting": "setMixedContentMode",
+          "timestamp": "2026-01-01T00:00:09.000Z",
+          "value": 0,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Use MIXED_CONTENT_NEVER_ALLOW unless a documented legacy compatibility case exists.",
+      "rule_id": "WV-MIXED-CONTENT",
+      "severity": "high",
+      "title": "Mixed content is always allowed"
+    },
+    {
+      "description": "The WebView can access local files. Combined with file URLs, content injection, or permissive bridge methods, this can expose app-private data.",
+      "evidence": [
+        {
+          "setting": "setAllowFileAccess",
+          "timestamp": "2026-01-01T00:00:02.000Z",
+          "value": true,
+          "webViewId": "android.webkit.WebView:111"
+        },
+        {
+          "setting": "setAllowFileAccess",
+          "timestamp": "2026-01-01T00:00:11.000Z",
+          "value": true,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Disable file access unless the app has a specific local-content use case.",
+      "rule_id": "WV-FILE-ACCESS",
+      "severity": "medium",
+      "title": "File access is enabled"
+    },
+    {
+      "description": "JavaScript is enabled in a WebView. This is expected for hybrid apps, but it increases the impact of untrusted content, XSS, and exposed JavaScript bridges.",
+      "evidence": [
+        {
+          "setting": "setJavaScriptEnabled",
+          "timestamp": "2026-01-01T00:00:01.000Z",
+          "value": true,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Only enable JavaScript for trusted content and pair it with strict origin checks before exposing native bridges.",
+      "rule_id": "WV-JS-ENABLED",
+      "severity": "medium",
+      "title": "JavaScript execution is enabled"
+    },
+    {
+      "description": "WebView Safe Browsing was disabled, reducing protection against known malicious URLs.",
+      "evidence": [
+        {
+          "setting": "setSafeBrowsingEnabled",
+          "timestamp": "2026-01-01T00:00:06.000Z",
+          "value": false,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Leave Safe Browsing enabled unless there is a documented compatibility reason.",
+      "rule_id": "WV-SAFE-BROWSING-DISABLED",
+      "severity": "medium",
+      "title": "Safe Browsing is disabled"
+    },
+    {
+      "description": "The WebView can load content:// resources. This can become risky when untrusted content can influence loaded URLs.",
+      "evidence": [
+        {
+          "setting": "setAllowContentAccess",
+          "timestamp": "2026-01-01T00:00:03.000Z",
+          "value": "true",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Disable content access unless required and validate all content:// URLs before loading them.",
+      "rule_id": "WV-CONTENT-ACCESS",
+      "severity": "low",
+      "title": "Content provider access is enabled"
+    },
+    {
+      "description": "Geolocation support is enabled in WebView content.",
+      "evidence": [
+        {
+          "setting": "setGeolocationEnabled",
+          "timestamp": "2026-01-01T00:00:07.000Z",
+          "value": true,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Only allow geolocation for trusted origins and ensure prompts are not auto-approved.",
+      "rule_id": "WV-GEOLOCATION-ENABLED",
+      "severity": "low",
+      "title": "Geolocation is enabled"
+    },
+    {
+      "description": "JavaScript is allowed to open windows without user gestures, which can enable unwanted navigation flows.",
+      "evidence": [
+        {
+          "setting": "setJavaScriptCanOpenWindowsAutomatically",
+          "timestamp": "2026-01-01T00:00:08.000Z",
+          "value": true,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Disable automatic window opening unless required by trusted content.",
+      "rule_id": "WV-JS-POPUPS",
+      "severity": "low",
+      "title": "JavaScript can open windows automatically"
+    }
+  ],
+  "origin_bridge_map": {
+    "android.webkit.WebView:111": {
+      "origins": {}
+    },
+    "unknown": {
+      "origins": {}
+    }
+  },
+  "summary": {
+    "event_count": 13,
+    "finding_count": 9,
+    "risk_score": 100,
+    "severity_counts": {
+      "critical": 1,
+      "high": 2,
+      "info": 0,
+      "low": 3,
+      "medium": 3
+    },
+    "skipped_line_count": 0,
+    "trusted_origins": [],
+    "webview_count": 2
+  },
+  "webviews": {
+    "android.webkit.WebView:111": {
+      "bridge_call_count": 0,
+      "bridge_exposure_count": 0,
+      "bridge_method_count": 0,
+      "bridges": {},
+      "js_event_count": 0,
+      "origins": [],
+      "permission_event_count": 0,
+      "settings": {
+        "setAllowContentAccess": "true",
+        "setAllowFileAccess": true,
+        "setAllowFileAccessFromFileURLs": true,
+        "setAllowUniversalAccessFromFileURLs": true,
+        "setDomStorageEnabled": true,
+        "setGeolocationEnabled": true,
+        "setJavaScriptCanOpenWindowsAutomatically": true,
+        "setJavaScriptEnabled": true,
+        "setMixedContentMode": 0,
+        "setSafeBrowsingEnabled": false
+      },
+      "taint_flow_count": 0,
+      "taint_flows": [],
+      "taint_source_count": 0,
+      "urls": []
+    },
+    "unknown": {
+      "bridge_call_count": 0,
+      "bridge_exposure_count": 0,
+      "bridge_method_count": 0,
+      "bridges": {},
+      "js_event_count": 0,
+      "origins": [],
+      "permission_event_count": 0,
+      "settings": {
+        "setJavaScriptEnabled": false
+      },
+      "taint_flow_count": 0,
+      "taint_flows": [],
+      "taint_source_count": 0,
+      "urls": []
+    }
+  }
+}

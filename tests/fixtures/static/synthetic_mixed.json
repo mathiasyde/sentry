@@ -1,0 +1,156 @@
+{
+  "all_public_methods_exposed": false,
+  "apk": {
+    "dex_files": [
+      "classes.dex"
+    ],
+    "path": "target/app.apk",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "bridge_classes": [
+    {
+      "class_name": "com.example.Bridge",
+      "methods": [
+        {
+          "declared_in": "com.example.Bridge",
+          "exposure": "annotation",
+          "name": "getToken",
+          "params": [],
+          "returns": "java.lang.String",
+          "sensitive": true
+        },
+        {
+          "declared_in": "com.example.Bridge",
+          "exposure": "annotation",
+          "name": "ping",
+          "params": [],
+          "returns": "java.lang.String",
+          "sensitive": false
+        }
+      ],
+      "registered": true,
+      "superclass": "java.lang.Object"
+    },
+    {
+      "class_name": "com.example.Hidden",
+      "methods": [
+        {
+          "declared_in": "com.example.Hidden",
+          "exposure": "annotation",
+          "name": "deleteAll",
+          "params": [],
+          "returns": "void",
+          "sensitive": true
+        }
+      ],
+      "registered": true,
+      "superclass": "java.lang.Object"
+    }
+  ],
+  "error": null,
+  "min_sdk": 24,
+  "package": "com.example",
+  "registrations": [
+    {
+      "call_site": {
+        "class": "com.example.Main",
+        "dex": "classes.dex",
+        "method": "loadWeb",
+        "offset": 8,
+        "signature": "loadWeb()"
+      },
+      "candidate_classes": [
+        "com.example.Bridge"
+      ],
+      "class_name": "com.example.Bridge",
+      "class_resolution": "exact",
+      "methods": [
+        {
+          "declared_in": "com.example.Bridge",
+          "exposure": "annotation",
+          "name": "getToken",
+          "params": [],
+          "returns": "java.lang.String",
+          "sensitive": true
+        },
+        {
+          "declared_in": "com.example.Bridge",
+          "exposure": "annotation",
+          "name": "ping",
+          "params": [],
+          "returns": "java.lang.String",
+          "sensitive": false
+        }
+      ],
+      "name": "AppBridge",
+      "name_source": {
+        "kind": "const-string",
+        "ref": null
+      },
+      "name_status": "resolved",
+      "webview_receiver": "verified"
+    },
+    {
+      "call_site": {
+        "class": "com.example.Settings",
+        "dex": "classes.dex",
+        "method": "openHelp",
+        "offset": 20,
+        "signature": "openHelp()"
+      },
+      "candidate_classes": [
+        "com.example.Hidden"
+      ],
+      "class_name": "com.example.Hidden",
+      "class_resolution": "exact",
+      "methods": [
+        {
+          "declared_in": "com.example.Hidden",
+          "exposure": "annotation",
+          "name": "deleteAll",
+          "params": [],
+          "returns": "void",
+          "sensitive": true
+        }
+      ],
+      "name": "Hidden",
+      "name_source": {
+        "kind": "const-string",
+        "ref": null
+      },
+      "name_status": "resolved",
+      "webview_receiver": "verified"
+    },
+    {
+      "call_site": {
+        "class": "com.example.Main",
+        "dex": "classes.dex",
+        "method": "attach",
+        "offset": 4,
+        "signature": "attach(java.lang.Object)"
+      },
+      "candidate_classes": [
+        "com.example.Other"
+      ],
+      "class_name": null,
+      "class_resolution": "ambiguous",
+      "methods": [],
+      "name": null,
+      "name_source": {
+        "kind": "parameter",
+        "ref": "param#2"
+      },
+      "name_status": "unresolved",
+      "webview_receiver": "verified"
+    }
+  ],
+  "removals": [],
+  "schema": 1,
+  "stats": {
+    "classes": 0,
+    "methods_scanned": 0,
+    "seconds": 0.0
+  },
+  "status": "completed",
+  "target_sdk": 33
+}

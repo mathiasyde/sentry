@@ -1,0 +1,100 @@
+{
+  "findings": [
+    {
+      "description": "A WebView permission request was granted. Camera, microphone, and geolocation grants can expose sensitive user data to web content.",
+      "evidence": [
+        {
+          "origin": "http://remote.example/",
+          "resources": [
+            "android.webkit.resource.AUDIO_CAPTURE"
+          ],
+          "timestamp": "2026-01-01T00:00:03.000Z"
+        }
+      ],
+      "recommendation": "Only grant permissions to a small allowlist of HTTPS origins and never grant all requested resources blindly.",
+      "rule_id": "WV-WEB-PERMISSION-GRANTED",
+      "severity": "high",
+      "title": "WebView permission was granted to web content"
+    },
+    {
+      "description": "A WebView permission request was granted. Camera, microphone, and geolocation grants can expose sensitive user data to web content.",
+      "evidence": [
+        {
+          "origin": "https://app.example/",
+          "resources": [
+            "android.webkit.resource.VIDEO_CAPTURE"
+          ],
+          "timestamp": "2026-01-01T00:00:04.000Z"
+        }
+      ],
+      "recommendation": "Only grant permissions to a small allowlist of HTTPS origins and never grant all requested resources blindly.",
+      "rule_id": "WV-WEB-PERMISSION-GRANTED",
+      "severity": "medium",
+      "title": "WebView permission was granted to web content"
+    },
+    {
+      "description": "Web content requested a WebView browser permission such as camera, microphone, protected media, MIDI, or geolocation.",
+      "evidence": [
+        {
+          "origin": "https://app.example/",
+          "resources": [
+            "android.webkit.resource.VIDEO_CAPTURE"
+          ],
+          "timestamp": "2026-01-01T00:00:00.000Z",
+          "type": null
+        }
+      ],
+      "recommendation": "Grant WebView permissions only after validating the request origin and the exact requested resources.",
+      "rule_id": "WV-WEB-PERMISSION-REQUEST",
+      "severity": "medium",
+      "title": "WebView content requested a browser permission"
+    },
+    {
+      "description": "Web content requested a WebView browser permission such as camera, microphone, protected media, MIDI, or geolocation.",
+      "evidence": [
+        {
+          "origin": "http://remote.example/",
+          "resources": null,
+          "timestamp": "2026-01-01T00:00:01.000Z",
+          "type": "geolocation"
+        }
+      ],
+      "recommendation": "Grant WebView permissions only after validating the request origin and the exact requested resources.",
+      "rule_id": "WV-WEB-PERMISSION-REQUEST",
+      "severity": "medium",
+      "title": "WebView content requested a browser permission"
+    },
+    {
+      "description": "Web content requested a WebView browser permission such as camera, microphone, protected media, MIDI, or geolocation.",
+      "evidence": [
+        {
+          "origin": null,
+          "resources": [],
+          "timestamp": "2026-01-01T00:00:02.000Z",
+          "type": null
+        }
+      ],
+      "recommendation": "Grant WebView permissions only after validating the request origin and the exact requested resources.",
+      "rule_id": "WV-WEB-PERMISSION-REQUEST",
+      "severity": "low",
+      "title": "WebView content requested a browser permission"
+    }
+  ],
+  "origin_bridge_map": {},
+  "summary": {
+    "event_count": 6,
+    "finding_count": 5,
+    "risk_score": 53,
+    "severity_counts": {
+      "critical": 0,
+      "high": 1,
+      "info": 0,
+      "low": 1,
+      "medium": 3
+    },
+    "skipped_line_count": 0,
+    "trusted_origins": [],
+    "webview_count": 0
+  },
+  "webviews": {}
+}

@@ -1,0 +1,20 @@
+{
+  "findings": [],
+  "origin_bridge_map": {},
+  "summary": {
+    "event_count": 0,
+    "finding_count": 0,
+    "risk_score": 0,
+    "severity_counts": {
+      "critical": 0,
+      "high": 0,
+      "info": 0,
+      "low": 0,
+      "medium": 0
+    },
+    "skipped_line_count": 0,
+    "trusted_origins": [],
+    "webview_count": 0
+  },
+  "webviews": {}
+}
