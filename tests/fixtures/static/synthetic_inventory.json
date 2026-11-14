@@ -1,0 +1,161 @@
+{
+  "all_public_methods_exposed": true,
+  "apk": {
+    "dex_files": [
+      "classes.dex"
+    ],
+    "path": "target/app.apk",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "bridge_classes": [
+    {
+      "class_name": "com.example.Legacy",
+      "methods": [
+        {
+          "declared_in": "java.lang.Object",
+          "exposure": "public-pre-17",
+          "name": "getClass",
+          "params": [],
+          "returns": "java.lang.Class",
+          "sensitive": false
+        },
+        {
+          "declared_in": "com.example.Legacy",
+          "exposure": "public-pre-17",
+          "name": "readFile",
+          "params": [
+            "java.lang.String"
+          ],
+          "returns": "java.lang.String",
+          "sensitive": true
+        }
+      ],
+      "registered": true,
+      "superclass": "java.lang.Object"
+    },
+    {
+      "class_name": "com.example.Spare",
+      "methods": [
+        {
+          "declared_in": "com.example.Spare",
+          "exposure": "annotation",
+          "name": "getToken",
+          "params": [],
+          "returns": "java.lang.String",
+          "sensitive": true
+        }
+      ],
+      "registered": true,
+      "superclass": "java.lang.Object"
+    },
+    {
+      "class_name": "com.example.Unused",
+      "methods": [
+        {
+          "declared_in": "com.example.Unused",
+          "exposure": "annotation",
+          "name": "ping",
+          "params": [],
+          "returns": "java.lang.String",
+          "sensitive": false
+        }
+      ],
+      "registered": false,
+      "superclass": "java.lang.Object"
+    }
+  ],
+  "error": null,
+  "min_sdk": 24,
+  "package": "com.example",
+  "registrations": [
+    {
+      "call_site": {
+        "class": "com.example.Main",
+        "dex": "classes.dex",
+        "method": "onCreate",
+        "offset": 12,
+        "signature": "onCreate(android.os.Bundle)"
+      },
+      "candidate_classes": [
+        "com.example.Legacy"
+      ],
+      "class_name": "com.example.Legacy",
+      "class_resolution": "exact",
+      "methods": [
+        {
+          "declared_in": "java.lang.Object",
+          "exposure": "public-pre-17",
+          "name": "getClass",
+          "params": [],
+          "returns": "java.lang.Class",
+          "sensitive": false
+        },
+        {
+          "declared_in": "com.example.Legacy",
+          "exposure": "public-pre-17",
+          "name": "readFile",
+          "params": [
+            "java.lang.String"
+          ],
+          "returns": "java.lang.String",
+          "sensitive": true
+        }
+      ],
+      "name": "Legacy",
+      "name_source": {
+        "kind": "const-string",
+        "ref": null
+      },
+      "name_status": "resolved",
+      "webview_receiver": "verified"
+    },
+    {
+      "call_site": {
+        "class": "com.example.Main",
+        "dex": "classes.dex",
+        "method": "attach",
+        "offset": 40,
+        "signature": "attach(java.lang.Object)"
+      },
+      "candidate_classes": [
+        "com.example.Legacy",
+        "com.example.Spare"
+      ],
+      "class_name": null,
+      "class_resolution": "ambiguous",
+      "methods": [],
+      "name": null,
+      "name_source": {
+        "kind": "method-result",
+        "ref": "com.example.Cfg.bridgeName()"
+      },
+      "name_status": "unresolved",
+      "webview_receiver": "verified"
+    }
+  ],
+  "removals": [
+    {
+      "call_site": {
+        "class": "com.example.Main",
+        "dex": "classes.dex",
+        "method": "onDestroy",
+        "offset": 3,
+        "signature": "onDestroy()"
+      },
+      "name": "Legacy",
+      "name_source": {
+        "kind": "const-string",
+        "ref": null
+      },
+      "name_status": "resolved"
+    }
+  ],
+  "schema": 1,
+  "stats": {
+    "classes": 0,
+    "methods_scanned": 0,
+    "seconds": 0.0
+  },
+  "status": "completed",
+  "target_sdk": 16
+}

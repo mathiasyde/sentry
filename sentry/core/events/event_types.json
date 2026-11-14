@@ -1,0 +1,18 @@
+{
+  "WEBVIEW_CREATED": "webview.created",
+  "WEBVIEW_PAGE_LOADED": "webview.page.loaded",
+  "WEBVIEW_ADDED": "webview.added",
+  "WEBVIEW_CLIENT_SET": "webview.client.set",
+  "WEBCHROME_CLIENT_SET": "webview.chrome_client.set",
+  "WEBVIEW_SETTINGS_CHANGED": "webview.settings.changed",
+  "URL_LOADED": "url.loaded",
+  "JS_EVALUATED": "js.evaluated",
+  "JS_PROBE": "js.probe",
+  "JS_PROBE_ERROR": "js.probe.error",
+  "BRIDGE_ADDED": "bridge.added",
+  "BRIDGE_METHOD_CALLED": "bridge.method.called",
+  "BRIDGE_METHOD_ADDED": "bridge.method.added",
+  "PERMISSION_REQUESTED": "permission.requested",
+  "PERMISSION_GRANT_CALLED": "permission.grant.called",
+  "PERMISSION_DENY_CALLED": "permission.deny.called"
+}

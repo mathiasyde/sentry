@@ -1,0 +1,140 @@
+{
+  "findings": [
+    {
+      "description": "JavaScript running inside the WebView made or prepared a cleartext HTTP request.",
+      "evidence": [
+        {
+          "api": "fetch",
+          "href": "https://app.example/",
+          "timestamp": "2026-01-01T00:00:03.000Z",
+          "url": "http://api.example/data",
+          "webViewId": "android.webkit.WebView:222"
+        }
+      ],
+      "recommendation": "Use HTTPS endpoints and apply Content Security Policy or application-level URL allowlists.",
+      "rule_id": "WV-JS-CLEARTEXT-NETWORK",
+      "severity": "medium",
+      "title": "WebView JavaScript contacted a cleartext URL"
+    },
+    {
+      "description": "JavaScript running inside the WebView made or prepared a cleartext HTTP request.",
+      "evidence": [
+        {
+          "api": "XMLHttpRequest.open",
+          "href": "https://app.example/",
+          "timestamp": "2026-01-01T00:00:05.000Z",
+          "url": "http://api.example/xhr",
+          "webViewId": "android.webkit.WebView:222"
+        }
+      ],
+      "recommendation": "Use HTTPS endpoints and apply Content Security Policy or application-level URL allowlists.",
+      "rule_id": "WV-JS-CLEARTEXT-NETWORK",
+      "severity": "medium",
+      "title": "WebView JavaScript contacted a cleartext URL"
+    },
+    {
+      "description": "JavaScript running inside the WebView called eval, which increases XSS and injection impact.",
+      "evidence": [
+        {
+          "arguments": [
+            "1+1"
+          ],
+          "href": "https://app.example/",
+          "timestamp": "2026-01-01T00:00:02.000Z",
+          "webViewId": "android.webkit.WebView:222"
+        }
+      ],
+      "recommendation": "Avoid eval and use safer parsing or dispatch mechanisms.",
+      "rule_id": "WV-JS-EVAL",
+      "severity": "medium",
+      "title": "WebView page executed JavaScript eval"
+    },
+    {
+      "description": "The app called evaluateJavascript. If script contents include attacker-controlled data, this can become JavaScript injection.",
+      "evidence": [
+        {
+          "pageUrl": "https://app.example/",
+          "script": "window.init()",
+          "timestamp": "2026-01-01T00:00:00.000Z",
+          "webViewId": "android.webkit.WebView:222"
+        },
+        {
+          "pageUrl": "https://app.example/",
+          "script": "window.init()",
+          "timestamp": "2026-01-01T00:00:01.000Z",
+          "webViewId": "android.webkit.WebView:222"
+        }
+      ],
+      "recommendation": "Avoid string-built JavaScript. Use structured message passing and encode any values inserted into JavaScript code.",
+      "rule_id": "WV-JS-EVALUATED",
+      "severity": "medium",
+      "title": "Native code evaluated JavaScript in WebView"
+    },
+    {
+      "description": "The injected JavaScript probe could not run or parse its result for at least one WebView state.",
+      "evidence": [
+        {
+          "error": "Error: blocked",
+          "href": null,
+          "timestamp": "2026-01-01T00:00:07.000Z",
+          "webViewId": "android.webkit.WebView:222"
+        }
+      ],
+      "recommendation": "Review whether the page navigated, blocked script execution, or removed probe state.",
+      "rule_id": "WV-PROBE-ERROR",
+      "severity": "info",
+      "title": "JavaScript probe reported an error"
+    },
+    {
+      "description": "The injected JavaScript probe could not run or parse its result for at least one WebView state.",
+      "evidence": [
+        {
+          "error": "failed to parse probe result",
+          "href": "https://app.example/",
+          "timestamp": "2026-01-01T00:00:08.000Z",
+          "webViewId": "android.webkit.WebView:222"
+        }
+      ],
+      "recommendation": "Review whether the page navigated, blocked script execution, or removed probe state.",
+      "rule_id": "WV-PROBE-ERROR",
+      "severity": "info",
+      "title": "JavaScript probe reported an error"
+    }
+  ],
+  "origin_bridge_map": {
+    "android.webkit.WebView:222": {
+      "origins": {}
+    }
+  },
+  "summary": {
+    "event_count": 9,
+    "finding_count": 6,
+    "risk_score": 40,
+    "severity_counts": {
+      "critical": 0,
+      "high": 0,
+      "info": 2,
+      "low": 0,
+      "medium": 4
+    },
+    "skipped_line_count": 0,
+    "trusted_origins": [],
+    "webview_count": 1
+  },
+  "webviews": {
+    "android.webkit.WebView:222": {
+      "bridge_call_count": 0,
+      "bridge_exposure_count": 0,
+      "bridge_method_count": 0,
+      "bridges": {},
+      "js_event_count": 5,
+      "origins": [],
+      "permission_event_count": 0,
+      "settings": {},
+      "taint_flow_count": 0,
+      "taint_flows": [],
+      "taint_source_count": 0,
+      "urls": []
+    }
+  }
+}

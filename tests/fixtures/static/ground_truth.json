@@ -1,0 +1,98 @@
+{
+  "JSUpdateCaseD.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.jsUpdatecaseD.MainActivity",
+        "class_resolution": "exact",
+        "methods": [
+          "getData"
+        ],
+        "name": "Android"
+      }
+    ]
+  },
+  "JsUpdateCaseE.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.jsUpdatecaseE.MainActivity",
+        "class_resolution": "exact",
+        "methods": [
+          "getData"
+        ],
+        "name": "Android"
+      }
+    ]
+  },
+  "JsUpdateCaseF.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.jsUpdatecaseF.MainActivity",
+        "class_resolution": "exact",
+        "methods": [
+          "getData"
+        ],
+        "name": "Android"
+      }
+    ]
+  },
+  "JsUpdateCaseG.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.jsUpdatecaseG.MainActivity",
+        "class_resolution": "exact",
+        "methods": [
+          "getData"
+        ],
+        "name": "Android"
+      }
+    ]
+  },
+  "strongUpdate.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.strongupdate.BridgeClass",
+        "class_resolution": "exact",
+        "methods": [
+          "showData"
+        ],
+        "name": "Android"
+      }
+    ]
+  },
+  "strongUpdatecaseA.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.strongupdate.BridgeClass",
+        "class_resolution": "exact",
+        "methods": [
+          "showData"
+        ],
+        "name": "Android"
+      }
+    ]
+  },
+  "strongUpdatecaseB.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.strongupdatecaseb.MainActivity",
+        "class_resolution": "exact",
+        "methods": [
+          "getData"
+        ],
+        "name": "Android"
+      }
+    ]
+  },
+  "strongUpdatecaseC.apk": {
+    "registrations": [
+      {
+        "class_name": "com.example.strongupdatecaseC.MainActivity",
+        "class_resolution": "exact",
+        "methods": [
+          "getData"
+        ],
+        "name": "Android"
+      }
+    ]
+  }
+}

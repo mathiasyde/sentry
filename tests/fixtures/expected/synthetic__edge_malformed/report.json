@@ -1,0 +1,76 @@
+{
+  "findings": [
+    {
+      "description": "The WebView loaded content over HTTP. Cleartext traffic can be intercepted or modified, which is especially dangerous when JavaScript bridges are exposed.",
+      "evidence": [
+        {
+          "source": "loadUrl",
+          "timestamp": "2026-01-01T00:00:01.000Z",
+          "url": "http://x.example/",
+          "webViewId": "android.webkit.WebView:111"
+        }
+      ],
+      "recommendation": "Use HTTPS for WebView content and disable cleartext traffic in the Android network security configuration.",
+      "rule_id": "WV-CLEARTEXT-URL",
+      "severity": "high",
+      "title": "Cleartext HTTP content loaded in WebView"
+    }
+  ],
+  "origin_bridge_map": {
+    "android.webkit.WebView:111": {
+      "origins": {}
+    },
+    "unknown": {
+      "origins": {}
+    }
+  },
+  "summary": {
+    "event_count": 3,
+    "finding_count": 1,
+    "risk_score": 20,
+    "severity_counts": {
+      "critical": 0,
+      "high": 1,
+      "info": 0,
+      "low": 0,
+      "medium": 0
+    },
+    "skipped_line_count": 6,
+    "trusted_origins": [],
+    "webview_count": 2
+  },
+  "webviews": {
+    "android.webkit.WebView:111": {
+      "bridge_call_count": 0,
+      "bridge_exposure_count": 0,
+      "bridge_method_count": 0,
+      "bridges": {},
+      "js_event_count": 0,
+      "origins": [
+        "http://x.example"
+      ],
+      "permission_event_count": 0,
+      "settings": {},
+      "taint_flow_count": 0,
+      "taint_flows": [],
+      "taint_source_count": 0,
+      "urls": [
+        "http://x.example/"
+      ]
+    },
+    "unknown": {
+      "bridge_call_count": 0,
+      "bridge_exposure_count": 0,
+      "bridge_method_count": 0,
+      "bridges": {},
+      "js_event_count": 0,
+      "origins": [],
+      "permission_event_count": 0,
+      "settings": {},
+      "taint_flow_count": 0,
+      "taint_flows": [],
+      "taint_source_count": 0,
+      "urls": []
+    }
+  }
+}

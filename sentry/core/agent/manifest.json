@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {"kind": "vocabulary", "file": "core/events/event_types.json"},
+    {"kind": "browser", "name": "observer", "files": [
+      "browser/observer/00_namespace.js",
+      "browser/observer/10_serialize.js",
+      "browser/observer/20_taint.js",
+      "browser/observer/30_intercepts.js",
+      "browser/observer/40_storage.js",
+      "browser/observer/50_bridge_wrapper.js"
+    ], "wrap": "iife"},
+    {"kind": "browser", "name": "bridgeTaint", "file": "browser/bridge_taint.js"},
+    {"kind": "browser", "name": "probe", "file": "browser/probe.js"},
+    {"kind": "source", "file": "core/agent/sanitize.js"},
+    {"kind": "source", "file": "core/agent/emitter.js"},
+    {"kind": "source", "file": "native/registry.js"},
+    {"kind": "source", "file": "native/browser_delivery.js"},
+    {"kind": "source", "file": "native/webview_lifecycle.js"},
+    {"kind": "source", "file": "native/webview_settings.js"},
+    {"kind": "source", "file": "native/permissions.js"},
+    {"kind": "source", "file": "native/webview_clients.js"},
+    {"kind": "source", "file": "native/javascript_bridge.js"},
+    {"kind": "source", "file": "native/javascript_evaluation.js"},
+    {"kind": "source", "file": "native/main.js"},
+    {"kind": "source", "file": "native/environment.js"}
+  ]
+}

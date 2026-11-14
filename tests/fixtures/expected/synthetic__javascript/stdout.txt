@@ -1,0 +1,1 @@
+Generated report: <JSON> and <MD> (6 findings, risk score 40/100)
