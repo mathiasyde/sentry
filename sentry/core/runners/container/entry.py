@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import threading
 from pathlib import Path
 
 from core.host import Host
+from core.run.intent_launch import launch_profiled_activities
+from core.run.workspace import Workspace
+from core.runners.adb import Adb
 
 ENV_FILE = Path("/sentry/target/.env")
+WORKSPACE_ROOT = Path("/sentry")
 AGENT = "/sentry/build/agent.js"
 
 
@@ -26,6 +31,16 @@ def main(host: Host | None = None, env_file: Path = ENV_FILE) -> int:
     host.run_checked(["adb", "connect", "emulator:5555"])
     host.run_checked(["adb", "forward", "tcp:27042", "tcp:27042"])  # frida-server port
     host.run_checked(["adb", "reverse", "tcp:5173", "tcp:5173"])  # web server
+
+    # Same trick as the local runner: fire am start for the profiled activities concurrently with
+    # the (blocking) frida run below, so the launches land in the process it just hooked.
+    launcher = threading.Thread(
+        target=launch_profiled_activities,
+        args=(host, Adb(host), Workspace(WORKSPACE_ROOT), host.env["APP_PACKAGE"], host.getenv("SENTRY_VERBOSE") == "true"),
+        daemon=True,
+    )
+    launcher.start()
+
     return host.run(["frida", "-H", "127.0.0.1:27042", "-f", host.env["APP_PACKAGE"], "-l", AGENT]).returncode
 
 

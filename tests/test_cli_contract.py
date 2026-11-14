@@ -11,7 +11,10 @@ from pathlib import Path
 
 from tests.helpers import LEGACY_DIR, REPO_ROOT
 
-OPTIONS_LINE = "Options: --[no-]discover-bridge-interfaces[=true|false]  static JavaScript bridge discovery (default: true)"
+OPTIONS_LINE = (
+    "Options: --[no-]discover-bridge-interfaces[=true|false]  static JavaScript bridge discovery (default: true)\n"
+    "         --[no-]verbose[=true|false]                     verbose static-analysis logging (default: false)"
+)
 
 SCENARIOS = {
     "no_args": ([], {}),

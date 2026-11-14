@@ -15,6 +15,7 @@ class RunContext:
     apk: str
     package: str
     kvm_available: bool
+    verbose: bool = False
 
 
 class Runner:

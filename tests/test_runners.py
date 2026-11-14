@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import contextlib
 import io
+import json
 import os
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from tests.helpers import SENTRY_DIR
 
@@ -131,6 +133,40 @@ class ContainerEntryPoints(unittest.TestCase):
                 ["frida", "-H", "127.0.0.1:27042", "-f", "com.example.app", "-l", "/sentry/build/agent.js"],
             ],
         )
+
+    def test_sentry_entry_launches_profiled_activities_concurrently(self) -> None:
+        class SynchronousThread:
+            """Runs the target immediately instead of in a background thread, so the test is deterministic."""
+
+            def __init__(self, target, args=(), daemon=False) -> None:
+                self.target, self.args = target, args
+
+            def start(self) -> None:
+                self.target(*self.args)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "target").mkdir()
+            env_file = root / "target" / ".env"
+            env_file.write_text("APP_PACKAGE=com.example.app\nSENTRY_VERBOSE=true\n", encoding="utf-8")
+            profile = {
+                "status": "completed",
+                "activities": [
+                    {"class_name": "com.example.app.MainActivity", "exported": True, "exported_declared": True,
+                     "intent_filters": [], "intent_keys": []}
+                ],
+            }
+            (root / "target" / "intent-data-profile.json").write_text(json.dumps(profile), encoding="utf-8")
+            host = FakeHost(respond=lambda cmd: Result(3 if cmd[0] == "frida" else 0))
+            with (
+                mock.patch("core.runners.container.entry.threading.Thread", SynchronousThread),
+                mock.patch("core.runners.container.entry.WORKSPACE_ROOT", root),
+            ):
+                code = entry.main(host, env_file)
+        self.assertEqual(code, 3)
+        shell_calls = [c for c in host.commands_run() if c[:2] == ["adb", "shell"]]
+        self.assertEqual(len(shell_calls), 1)
+        self.assertIn("am start -W -n com.example.app/com.example.app.MainActivity", shell_calls[0][2])
 
     def test_entry_stops_on_failure(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

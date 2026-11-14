@@ -8,6 +8,7 @@ from pathlib import Path
 
 from core.host import Host, require_commands
 from core.run.discovery import run_discovery
+from core.run.intent_profile import run_intent_profile
 from core.run.options import USAGE_OPTIONS, OptionError, parse_args
 from core.run.package import apk_package_name, find_aapt
 from core.run.reporting import report_on_exit
@@ -24,7 +25,7 @@ class AnalysisSession:
     def run(self, argv: list[str]) -> int:
         self.host.echo("Sentry - version alpha", "")
         try:
-            args, discover = parse_args(argv)
+            args, discover, verbose = parse_args(argv)
         except OptionError as exc:
             self.host.die(f"Error: {exc}")
         kvm_available = self.host.has_kvm()
@@ -33,13 +34,14 @@ class AnalysisSession:
         apk = self.validate_apk(args)
         package = self.resolve_package(args, apk)
         runner = select_runner(self.host.getenv("SENTRY_RUNNER") or "auto", self.host, kvm_available)
-        context = RunContext(self.host, self.workspace, apk, package, kvm_available)
+        context = RunContext(self.host, self.workspace, apk, package, kvm_available, verbose)
 
         runner.preflight(context)
-        self.workspace.prepare(apk, package)
+        self.workspace.prepare(apk, package, verbose)
         with report_on_exit(self.host, self.workspace):
             if discover:
                 run_discovery(self.host, self.workspace)
+                run_intent_profile(self.host, self.workspace, verbose)
             runner.run(context)
         return 0
 

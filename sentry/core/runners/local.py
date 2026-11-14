@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import threading
+
 from core.agent import build_agent
 from core.host import require_commands
+from core.run.intent_launch import launch_profiled_activities
 from core.runners.adb import Adb
 from core.runners.base import RunContext, Runner
 
@@ -36,6 +39,13 @@ class LocalRunner(Runner):
 
         if build_agent.main(["--out", str(workspace.agent)]) != 0:
             host.die("Error: failed to build Sentry agent")
+
+        launcher = threading.Thread(
+            target=launch_profiled_activities,
+            args=(host, adb, workspace, context.package, context.verbose),
+            daemon=True,
+        )
+        launcher.start()
 
         device = host.getenv("SENTRY_FRIDA_DEVICE")
         target = ["-D", device] if device else ["-U"]

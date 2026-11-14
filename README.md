@@ -5,7 +5,7 @@ Sentry is a dynamic analysis tool for hybrid Android apps. It runs an APK under 
 Use `analyse.sh` as the entry point for analysis.
 
 ```bash
-./analyse.sh [--[no-]discover-bridge-interfaces[=true|false]] <APK-FILE> [<APK-PACKAGE>]
+./analyse.sh [--[no-]discover-bridge-interfaces[=true|false]] [--[no-]verbose[=true|false]] <APK-FILE> [<APK-PACKAGE>]
 ```
 
 
@@ -40,6 +40,7 @@ Package extraction requires `aapt`. It is looked up on `PATH`, then in the newes
 - `target/output.log`: raw event stream copy used for report generation
 - `target/report.json`: machine-readable report with risk score, findings, evidence, WebView inventory, sensitive data flows, and origin-to-bridge map
 - `target/static-bridges.json`: JavaScript bridges found by static analysis of the APK (see below)
+- `target/intent-data-profile.json`: per-activity Intent/URI data shape for activities that touch a WebView (see below)
 
 If no Sentry events are captured, report generation is skipped so empty runs are not mistaken for clean results.
 
@@ -67,6 +68,48 @@ To scan an APK without a device:
 ```bash
 PYTHONPATH=sentry python3 -m core.static path/to/app.apk [--out static-bridges.json]
 ```
+
+## Intent data profile
+
+Alongside bridge discovery, Sentry scans for every Activity (or activity-alias) whose code touches a
+WebView and profiles the Intent/URI data it can be handed from outside the app: the manifest's own
+`<intent-filter>` shape (actions, categories, `<data>` scheme/host/path/mimeType, and whether the
+activity is exported) plus the literal keys the activity reads back out of the incoming Intent
+(`getStringExtra`, `getQueryParameter`, `Bundle` getters, and friends). A key built at runtime instead
+of written as a literal is reported as unresolved, never guessed — the same rule static bridge
+discovery follows for bridge names. Results go to `target/intent-data-profile.json`.
+
+This step is silent by default: it never prints anything, success or failure, and a failure (for
+example a packed or corrupt APK) never stops the run — it's recorded as a `"failed"` artifact and
+otherwise ignored. Pass `--verbose` to also print a one-line summary on success:
+
+```bash
+./analyse.sh --verbose path/to/app.apk com.example.app
+```
+
+It runs whenever static bridge discovery does, and is skipped along with it by
+`--no-discover-bridge-interfaces`.
+
+### Driving coverage with it
+
+Sentry uses the profile to exercise the activities it found, in both runner modes: a few seconds
+into the Frida session (enough time for the app to finish starting and the agent's hooks to attach),
+it fires one `adb shell am start -n <component> ...` per activity/intent-filter/`<data>` combination
+the profile has, shaped from the manifest's declared action/categories/data and the resolved
+`getStringExtra`/`getQueryParameter`/... keys (query keys become `?key=value` on the URI, extras
+become `--es key value`; an unresolved key contributes nothing). This runs concurrently with the live
+capture, so whatever those activities do lands in the already-hooked process. A failing `am start`
+(the activity manager busy, the app still mid-launch, a transient adb hiccup) is retried up to 3
+times with exponential backoff (1.5s, then 3s) before it's given up on. Pass `--verbose` to see each
+`am start` it runs, its exit status, and how many attempts it took; it is otherwise silent and
+best-effort, same as the profiling step itself — nothing to launch, or an adb failure, just means
+less coverage, not a failed run.
+
+In local-runner mode this happens in the host Python process, the same one that runs `adb`/`frida`.
+In Docker mode it happens inside the `sentry` container instead (`core/runners/container/entry.py`),
+since that's where that mode's adb session to the emulator lives; it reads the same
+`target/intent-data-profile.json` (volume-mounted) and gets `--verbose` via `SENTRY_VERBOSE` in
+`target/.env`, which `analyse.sh` writes alongside `APP_PACKAGE`.
 
 Limits: the analysis works within one method at a time. A bridge name built at runtime (concatenated, read from config, or returned by another method) is reported as unresolved, along with where it came from; it is never guessed. Code loaded at runtime (downloaded dex, reflection) shows up only as `runtime-only`. For apps targeting API levels below 17, every public method of a registered object is reported as exposed.
 
